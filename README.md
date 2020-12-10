@@ -22,11 +22,11 @@ with open('data/jazz_query_response', 'rb') as read_file:
 
 # Task 1
 
-The jazz_tracks object loaded above is a list of dictionary. Each element of the dictionary contains data about a song. 
+The jazz_tracks object loaded above is a list of dictionaries. Each element of the dictionary contains data about a song. 
 
 The first task is to parse this list, and gather the song length data from each dictionary.  
 
-To do so, you will have to loop through jazz_tracks, then use the appropriate key to access the song length data for each element, this data to the list.  The list should then be composed of 1000 song lengths.
+To do so, you will have to loop through jazz_tracks, use the appropriate key to access the song length data for each element, then append this data ponit to the list.  The list should then be composed of 1000 song lengths.
 
 
 ```python
@@ -71,7 +71,7 @@ np.mean(track_durations)
 # Task 3
 Calculate the variance and standard deviation of the sample of track lengths. 
 
-For now, just user the number of tracks in the sample as the denominator.
+Since it is a sample, use the number of tracks minus 1 in the sample as the denominator.
 
 
 ```python
@@ -82,13 +82,13 @@ track_length_variance = None
 
 ```python
 # Cross check with numpy.  ddof stands for degrees
-np.var(track_durations)
+np.var(track_durations, ddof=1)
 ```
 
 
 
 
-    8991619574.84083
+    9000620195.035866
 
 
 
@@ -102,17 +102,57 @@ track_standard_deviation = None
 
 ```python
 # Cross check with numpy
-np.std(track_durations)
+np.std(track_durations, ddof=1)
 ```
 
 
 
 
-    94824.15079947107
+    94871.59846358585
 
 
 
-# Task 4:
+# Task 4: Covariance and correlation
+
+The formula for covariance of a sample is  
+
+$$s_{jk} = \frac{1}{n-1}\sum_{i=1}^{n}(x_{ij}-\bar{x}_j)(x_{ik}-\bar{x}_k)$$
+
+Here are 4 lists variables taken from our Spotify API request.
+
+
+```python
+popularity = [track['popularity'] for track in jazz_tracks]
+duration = [track['duration_ms'] for track in jazz_tracks]
+total_tracks = [track['album']['total_tracks'] for track in jazz_tracks]
+track_number =  [track['track_number'] for track in jazz_tracks]
+```
+
+Write a function that takes in any two of the 4 lists, and returns the covariance between them.
+
+
+```python
+# Your code here
+def covariance():
+    pass
+```
+
+The correlation between two array-like objects is simply the covariance divided by the product of the standard deviatiations of each list.
+
+Write a function which calculates the correlation.  You can use the covariance function you calculated above within the correlation function.
+
+
+```python
+# Your code here
+def correlation():
+    pass
+```
+
+Using your function, of the four lists above, which have the strongest correlation?  Is the correlation positive or negative? What does this mean?
+
+- Your written answer here
+
+# Task 5:
 
 Let's look at a histogram of the jazz track lengths.
 
@@ -126,7 +166,7 @@ ax.set_xlabel('Song Length in MS');
 ```
 
 
-![png](index_files/index_19_0.png)
+![png](index_files/index_29_0.png)
 
 
 Describe the shape of this histogram in the markdown cell below. Is it skewed? Which way? Does the mean you calculated above seem correct? Does it indicate the presence of outliers of song length?
@@ -135,7 +175,7 @@ Describe the shape of this histogram in the markdown cell below. Is it skewed? W
 >
 
 
-# Task 4
+# Task 6
 
 Now, let's write a function that takes in any list of track lengths, then prints and returns the mean, variance, and standard deviation of the list.
 
@@ -171,6 +211,14 @@ def track_length_descriptor(track_duration_list, genre=''):
 ```
 
 
+      File "<ipython-input-42-e2c99dd6d74f>", line 18
+        ax.hist(<fill_in>, bins=20)
+                ^
+    SyntaxError: invalid syntax
+
+
+
+
 ```python
 with open('data/track_length_lists', 'rb') as read_file:
     classical_track_durations, rap_track_durations, punk_track_durations = pickle.load(read_file)
@@ -184,7 +232,7 @@ track_length_descriptor(classical_track_durations, "Classical")
 ```
 
 
-![png](index_files/index_26_0.png)
+![png](index_files/index_36_0.png)
 
 
     
@@ -209,7 +257,7 @@ track_length_descriptor(rap_track_durations, 'Rap')
 ```
 
 
-![png](index_files/index_27_0.png)
+![png](index_files/index_37_0.png)
 
 
     
@@ -234,7 +282,7 @@ track_length_descriptor(punk_track_durations, 'Punk')
 ```
 
 
-![png](index_files/index_28_0.png)
+![png](index_files/index_38_0.png)
 
 
     
