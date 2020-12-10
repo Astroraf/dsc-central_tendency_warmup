@@ -7,11 +7,11 @@ For this warmup, we will be parsing data held in objects returned from the Spoti
 
 # Task 1
 
-The jazz_tracks object loaded above is a list of dictionary. Each element of the dictionary contains data about a song. 
+The jazz_tracks object loaded above is a list of dictionaries. Each element of the dictionary contains data about a song. 
 
 The first task is to parse this list, and gather the song length data from each dictionary.  
 
-To do so, you will have to loop through jazz_tracks, then use the appropriate key to access the song length data for each element, this data to the list.  The list should then be composed of 1000 song lengths.
+To do so, you will have to loop through jazz_tracks, use the appropriate key to access the song length data for each element, then append this data ponit to the list.  The list should then be composed of 1000 song lengths.
 
 
 ```python
@@ -40,13 +40,13 @@ track_mean_length = track_total/len(track_durations)
 # Task 3
 Calculate the variance and standard deviation of the sample of track lengths. 
 
-For now, just user the number of tracks in the sample as the denominator.
+Since it is a sample, use the number of tracks minus 1 in the sample as the denominator.
 
 
 ```python
 
 numerator = 0
-denominator = len(track_durations)
+denominator = len(track_durations) - 1
 for track_length in track_durations:
     numerator += (track_length - track_mean_length)**2
     
@@ -57,7 +57,7 @@ track_length_variance
 
 
 
-    8991619574.840826
+    9000620195.035862
 
 
 
@@ -70,11 +70,68 @@ track_standard_deviation
 
 
 
-    94824.15079947106
+    94871.59846358583
 
 
 
-# Task 4:
+# Task 4: Covariance and correlation
+
+The formula for covariance of a sample is  
+
+$$s_{jk} = \frac{1}{n-1}\sum_{i=1}^{n}(x_{ij}-\bar{x}_j)(x_{ik}-\bar{x}_k)$$
+
+Here are 4 lists variables taken from our Spotify API request.
+
+Write a function that takes in any two of the 4 lists, and returns the covariance between them.
+
+
+```python
+def covariance(list_1, list_2):
+    numerator = 0
+    denominator = len(list_2)
+    
+    for x, y in zip(list_1, list_2):
+        numerator += ((x - np.mean(list_1))*(y-np.mean(list_2)))
+    
+    return numerator/denominator
+
+covariance(popularity, track_number)
+
+```
+
+
+
+
+    -19.825045999999972
+
+
+
+The correlation between two array-like objects is simply the covariance divided by the product of the standard deviatiations of each list.
+
+Write a function which calculates the correlation.  You can use the covariance function you calculated above within the correlation function.
+
+
+```python
+
+def correlation(list_1, list_2):
+    
+    return covariance(list_1, list_2)/(np.std(list_1)*np.std(list_2))
+
+correlation(popularity, track_number)
+```
+
+
+
+
+    -0.32859477932496006
+
+
+
+Using your function, of the four lists above, which have the strongest correlation?  Is the correlation positive or negative? What does this mean?
+
+- Your written answer here
+
+# Task 5:
 
 Let's look at a histogram of the jazz track lengths.
 
@@ -101,7 +158,7 @@ This makes sense given the right skew of the distribution.
 
 
 
-# Task 4
+# Task 6
 
 Now, let's write a function that takes in any list of track lengths, then prints and returns the mean, variance, and standard deviation of the list.
 
